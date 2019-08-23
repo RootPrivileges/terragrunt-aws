@@ -20,7 +20,7 @@ function usage {
     echo "  *** THIS USER WILL BE DELETED AT THE END OF THE RUN, UNLESS OTHERWISE INSTRUCTED  ***"
     echo ""
     echo "USAGE:"
-    echo "  ${0} -a <access key> -s <secret key> [-l <local_modules_directory>] [-r <region>]"
+    echo "  ${0} -a <access key> -s <secret key>  -k <keybase profile> [-l <local_modules_directory>] [-r <region>]"
     echo ""
     echo "OPTIONAL ARGUMENTS:"
     echo "  -l   Use a local folder as the source for Terragrunt modules e.g. ~/Code/terraform/modules"
@@ -31,9 +31,10 @@ function usage {
     echo "  - Terragrunt"
 }
 
-while getopts "a:l:r:s:h" option; do
+while getopts "a:k:l:r:s:h" option; do
     case ${option} in
         a ) ACCESS_KEY=$OPTARG;;
+        k ) KEYBASE_PROFILE=$OPTARG;;
         l ) LOCAL_MODULES_DIR=$OPTARG;;
         r ) DEFAULT_REGION=$OPTARG;;
         s ) SECRET_KEY=$OPTARG;;
@@ -55,6 +56,10 @@ if [[ -z "${ACCESS_KEY}" ]]; then
 fi
 if [[ -z "${SECRET_KEY}" ]]; then
     echo "Please provide the terragrunt.init user's secret key with -s <secret key>" 1>&2
+    VALIDATION_ERROR=1
+fi
+if [[ -z "${KEYBASE_PROFILE}" ]]; then
+    echo "Please provide the keybase username as -k <keybase profile> " 1>&2
     VALIDATION_ERROR=1
 fi
 if [[ -n "${VALIDATION_ERROR}" ]]; then
@@ -139,5 +144,15 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/terragrunt"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} -var keybase=${KEYBASE_PROFILE}
+TERRAGRUNT_GITLAB_ACCESS_KEY=$(terragrunt output ${TG_SOURCE_MODULE} terragrunt_user_access_key)
+TERRAGRUNT_GITLAB_SECRET_KEY=$(terragrunt output ${TG_SOURCE_MODULE} terragrunt_user_secret_key | base64 --decode | keybase pgp decrypt)
 popd
+
+
+echo ""
+echo "=== INITIALISATION COMPLETE ==="
+echo "Console login: https://${ACCOUNT_ID}.signin.aws.amazon.com/console"
+echo "----------------------------------------------------------------"
+echo "terragrunt.gitlab access key: " $TERRAGRUNT_GITLAB_ACCESS_KEY
+echo "terragrunt.gitlab secret key: " $TERRAGRUNT_GITLAB_SECRET_KEY
