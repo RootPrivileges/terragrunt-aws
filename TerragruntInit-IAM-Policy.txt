@@ -80,7 +80,7 @@
                 "iam:ListAttachedUserPolicies"
             ],
             "Resource": [
-                "arn:aws:iam::*:user/terraform-init"
+                "arn:aws:iam::*:user/terragrunt.init"
             ]
         },
         {
