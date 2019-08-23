@@ -68,3 +68,29 @@ fi
 
 
 export AWS_DEFAULT_REGION=${DEFAULT_REGION}
+
+function export_master_keys {
+    echo ""
+    echo "USING MASTER CREDENTIALS"
+    echo ""
+    export AWS_ACCESS_KEY_ID=${ACCESS_KEY}
+    export AWS_SECRET_ACCESS_KEY=${SECRET_KEY}
+}
+
+function pushd () {
+    command pushd "$@" > /dev/null
+}
+
+function popd () {
+    command popd "$@" > /dev/null
+}
+
+export_master_keys
+echo "=== CREATING ORGANISATION ==="
+pushd ./organisation
+if [[ -n "${TG_SOURCE}" ]]; then
+    TG_SOURCE_MODULE="${TG_SOURCE}//organisation"
+fi
+terragrunt init ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE}
+popd
