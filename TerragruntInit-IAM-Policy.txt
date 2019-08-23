@@ -43,7 +43,7 @@
             ]
         },
         {
-            "Sid": "AllowBillingRoleCreation",
+            "Sid": "AllowRoleCreation",
             "Effect": "Allow",
             "Action": [
                 "iam:GetRole",
@@ -53,7 +53,7 @@
                 "iam:UpdateAssumeRolePolicy"
             ],
             "Resource": [
-                "arn:aws:iam::*:role/Billing"
+                "arn:aws:iam::*:role/*"
             ]
         },
         {
