@@ -158,6 +158,14 @@ fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
 popd
+echo "=== CREATING administrators GROUP ==="
+pushd ./iam/groups/administrators
+if [[ -n "${TG_SOURCE}" ]]; then
+    TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/administrators"
+fi
+terragrunt init ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE}
+popd
 
 
 echo ""
