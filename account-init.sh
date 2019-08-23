@@ -29,6 +29,7 @@ function usage {
     echo "Requirements:"
     echo "  - Terraform"
     echo "  - Terragrunt"
+    echo "  - Keybase"
 }
 
 while getopts "a:k:l:r:s:h" option; do
