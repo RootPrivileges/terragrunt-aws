@@ -57,7 +57,7 @@
             ]
         },
         {
-            "Sid": "AllowIamCreateTerragruntPolicy",
+            "Sid": "AllowIamCreatePolicy",
             "Effect": "Allow",
             "Action": [
                 "iam:CreatePolicy",
@@ -67,7 +67,7 @@
                 "iam:GetPolicyVersion"
             ],
             "Resource": [
-                "arn:aws:iam::*:policy/*Terragrunt*"
+                "arn:aws:iam::*:policy/*"
             ]
         },
         {
