@@ -30,3 +30,41 @@ function usage {
     echo "  - Terraform"
     echo "  - Terragrunt"
 }
+
+while getopts "a:l:r:s:h" option; do
+    case ${option} in
+        a ) ACCESS_KEY=$OPTARG;;
+        l ) LOCAL_MODULES_DIR=$OPTARG;;
+        r ) DEFAULT_REGION=$OPTARG;;
+        s ) SECRET_KEY=$OPTARG;;
+        h )
+            usage
+            exit 0
+            ;;
+        \? )
+            echo "Invalid option: -$OPTARG" 1>&2
+            usage
+            exit 1
+            ;;
+    esac
+done
+
+if [[ -z "${ACCESS_KEY}" ]]; then
+    echo "Please provide the terragrunt.init user's access key with -a <access key>" 1>&2
+    VALIDATION_ERROR=1
+fi
+if [[ -z "${SECRET_KEY}" ]]; then
+    echo "Please provide the terragrunt.init user's secret key with -s <secret key>" 1>&2
+    VALIDATION_ERROR=1
+fi
+if [[ -n "${VALIDATION_ERROR}" ]]; then
+    echo ""
+    exit 1
+fi
+
+if [[ -n "${LOCAL_MODULES_DIR}" ]]; then
+    TG_SOURCE="--terragrunt-source ${LOCAL_MODULES_DIR}"
+fi
+
+
+export AWS_DEFAULT_REGION=${DEFAULT_REGION}
