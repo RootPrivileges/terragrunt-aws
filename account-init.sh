@@ -132,3 +132,12 @@ fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
 popd
+
+echo "=== CREATING terragrunt.gitlab USER ==="
+pushd ./iam/users/terragrunt-gitlab
+if [[ -n "${TG_SOURCE}" ]]; then
+    TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/terragrunt"
+fi
+terragrunt init ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE}
+popd

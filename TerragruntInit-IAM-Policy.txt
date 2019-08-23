@@ -105,15 +105,25 @@
             ]
         },
         {
-            "Sid": "AllowCreateGroups",
+            "Sid": "AllowCreateUsersAndGroups",
             "Effect": "Allow",
             "Action": [
+                "iam:CreateUser",
+                "iam:GetUser",
+                "iam:ListGroupsForUser",
+                "iam:AttachUserPolicy",
+                "iam:CreateAccessKey",
+                "iam:ListAttachedUserPolicies",
+                "iam:ListAccessKeys",
+                "iam:DetachUserPolicy",
                 "iam:CreateGroup",
                 "iam:AttachGroupPolicy",
                 "iam:GetGroup",
                 "iam:ListAttachedGroupPolicies",
                 "iam:DetachGroupPolicy",
-                "iam:AddUserToGroup"
+                "iam:AddUserToGroup",
+                "iam:CreateLoginProfile",
+                "iam:GetLoginProfile"
             ],
             "Resource": [
                 "*"
