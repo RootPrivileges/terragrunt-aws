@@ -93,6 +93,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
 fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
+ACCOUNT_ID=$(terragrunt output ${TG_SOURCE_MODULE} master_account_id)
 popd
 
 echo "=== CREATING MANAGEMENT ACCOUNT ==="
@@ -102,6 +103,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
 fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
+MANAGEMENT_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 echo "=== CREATING PRODUCTION ACCOUNT ==="
 pushd ./accounts/production
@@ -110,6 +112,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
 fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
+PRODUCTION_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 echo "=== CREATING STAGING ACCOUNT ==="
 pushd ./accounts/staging
@@ -118,4 +121,5 @@ if [[ -n "${TG_SOURCE}" ]]; then
 fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
+STAGING_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
