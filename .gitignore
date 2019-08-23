@@ -1,0 +1,10 @@
+.terraform
+terraform.tfvars
+*.tfstate
+*.tfstate.backup
+.*.sw?
+.idea
+terragrunt.iml
+vendor
+*.out
+.terragrunt-cache
