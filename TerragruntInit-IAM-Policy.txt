@@ -103,6 +103,21 @@
             "Resource": [
                 "*"
             ]
+        },
+        {
+            "Sid": "AllowCreateGroups",
+            "Effect": "Allow",
+            "Action": [
+                "iam:CreateGroup",
+                "iam:AttachGroupPolicy",
+                "iam:GetGroup",
+                "iam:ListAttachedGroupPolicies",
+                "iam:DetachGroupPolicy",
+                "iam:AddUserToGroup"
+            ],
+            "Resource": [
+                "*"
+            ]
         }
     ]
 }
