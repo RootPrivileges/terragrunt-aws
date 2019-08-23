@@ -150,6 +150,15 @@ TERRAGRUNT_GITLAB_ACCESS_KEY=$(terragrunt output ${TG_SOURCE_MODULE} terragrunt_
 TERRAGRUNT_GITLAB_SECRET_KEY=$(terragrunt output ${TG_SOURCE_MODULE} terragrunt_user_secret_key | base64 --decode | keybase pgp decrypt)
 popd
 
+echo "=== CREATING users GROUP ==="
+pushd ./iam/groups/users
+if [[ -n "${TG_SOURCE}" ]]; then
+    TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/users"
+fi
+terragrunt init ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE}
+popd
+
 
 echo ""
 echo "=== INITIALISATION COMPLETE ==="
