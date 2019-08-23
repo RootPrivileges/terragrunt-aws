@@ -35,7 +35,7 @@ It is based on the (outdated) script at https://github.com/liatrio/aws-accounts-
 8. Execute:
 
 ```
-./account-init.sh -a <access key> -s <secret key>
+./account-init.sh -a <access key> -s <secret key> -k <keybase profile>
 ```
 
 ### Optional flags
