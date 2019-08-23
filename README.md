@@ -14,6 +14,7 @@ It is based on the (outdated) script at https://github.com/liatrio/aws-accounts-
 
 - Terraform >= 0.12, on path
 - Terragrunt >= v0.9.14, on path
+- Keybase, installed locally and authenticated
 
 ## Execution
 
