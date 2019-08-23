@@ -14,7 +14,8 @@
                 "organizations:ListRoots",
                 "organizations:ListAWSServiceAccessForOrganization",
                 "organizations:ListParents",
-                "organizations:ListTagsForResource"
+                "organizations:ListTagsForResource",
+                "organizations:EnableAWSServiceAccess"
             ],
             "Resource": [
                 "*"
@@ -136,6 +137,23 @@
                 "iam:UpdateAccountPasswordPolicy",
                 "iam:GetAccountPasswordPolicy",
                 "iam:DeleteAccountPasswordPolicy"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "AllowCloudtrail",
+            "Effect": "Allow",
+            "Action": [
+                "cloudtrail:CreateTrail",
+                "cloudtrail:StartLogging",
+                "cloudtrail:UpdateTrail",
+                "cloudtrail:DescribeTrails",
+                "cloudtrail:ListTags",
+                "cloudtrail:DescribeTags",
+                "cloudtrail:GetTrailStatus",
+                "cloudtrail:GetEventSelectors"
             ],
             "Resource": [
                 "*"
