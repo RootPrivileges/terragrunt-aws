@@ -94,3 +94,12 @@ fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
 popd
+
+echo "=== CREATING MANAGEMENT ACCOUNT ==="
+pushd ./accounts/management
+if [[ -n "${TG_SOURCE}" ]]; then
+    TG_SOURCE_MODULE="${TG_SOURCE}//account"
+fi
+terragrunt init ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE}
+popd
