@@ -166,6 +166,14 @@ fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
 popd
+echo "=== CREATING finance GROUP ==="
+pushd ./iam/groups/finance
+if [[ -n "${TG_SOURCE}" ]]; then
+    TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/finance"
+fi
+terragrunt init ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE}
+popd
 
 
 echo ""
