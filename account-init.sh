@@ -211,21 +211,21 @@ terragrunt apply-all --terragrunt-exclude-dir first-run ${TG_SOURCE}
 
 echo ""
 echo "=== INITIALISATION COMPLETE ==="
-echo "Console login: https://${ACCOUNT_ID}.signin.aws.amazon.com/console"
+echo "Console login                : https://${ACCOUNT_ID}.signin.aws.amazon.com/console"
 echo "----------------------------------------------------------------"
-echo "Role Switch Links:"
-echo "Master Administrator     :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=Administrator&displayName=Master%20-%20Administrator"
-echo "Master Billing           :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=Billing&displayName=Master%20-%20Billing"
-echo "Terragrunt Data Read     :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=TerragruntReader&displayName=Master%20-%20Terragrunt%20Read"
-echo "Management Administrator :  https://signin.aws.amazon.com/switchrole?account=${MANAGEMENT_ID}&roleName=Administrator&displayName=Management%20-%20Administrator"
-echo "Production Administrator :  https://signin.aws.amazon.com/switchrole?account=${PRODUCTION_ID}&roleName=Administrator&displayName=Production%20-%20Administrator"
-echo "Staging Administrator    :  https://signin.aws.amazon.com/switchrole?account=${STAGING_ID}&roleName=Administrator&displayName=Staging%20-%20Administrator"
-echo "Staging Administrator    :  https://signin.aws.amazon.com/switchrole?account=${STAGING_ID}&roleName=PowerUser&displayName=Staging%20-%20Power%20User"
+echo "Role Switch Links"
+echo "Master Administrator         :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=Administrator&displayName=Master%20-%20Administrator"
+echo "Master Billing               :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=Billing&displayName=Master%20-%20Billing"
+echo "Terragrunt Bucket Read       :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=TerragruntReader&displayName=Master%20-%20Terragrunt%20Read"
+echo "Management Administrator     :  https://signin.aws.amazon.com/switchrole?account=${MANAGEMENT_ID}&roleName=Administrator&displayName=Management%20-%20Administrator"
+echo "Production Administrator     :  https://signin.aws.amazon.com/switchrole?account=${PRODUCTION_ID}&roleName=Administrator&displayName=Production%20-%20Administrator"
+echo "Staging Administrator        :  https://signin.aws.amazon.com/switchrole?account=${STAGING_ID}&roleName=Administrator&displayName=Staging%20-%20Administrator"
+echo "Staging Power User           :  https://signin.aws.amazon.com/switchrole?account=${STAGING_ID}&roleName=PowerUser&displayName=Staging%20-%20Power%20User"
 echo "----------------------------------------------------------------"
-echo "Administrator username  : " $ADMIN_USERNAME
-echo "Administrator password  : " $ADMIN_PASSWORD
-echo "Administrator access key: " $ADMIN_ACCESS_KEY
-echo "Administrator secret key: " $ADMIN_SECRET_KEY
+echo "Administrator username       : " $ADMIN_USERNAME
+echo "Administrator password       : " $ADMIN_PASSWORD
+echo "Administrator access key     : " $ADMIN_ACCESS_KEY
+echo "Administrator secret key     : " $ADMIN_SECRET_KEY
 echo "----------------------------------------------------------------"
-echo "terragrunt.gitlab access key: " $TERRAGRUNT_GITLAB_ACCESS_KEY
-echo "terragrunt.gitlab secret key: " $TERRAGRUNT_GITLAB_SECRET_KEY
+echo "terragrunt.gitlab access key : " $TERRAGRUNT_GITLAB_ACCESS_KEY
+echo "terragrunt.gitlab secret key : " $TERRAGRUNT_GITLAB_SECRET_KEY
