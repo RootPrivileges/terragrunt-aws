@@ -94,7 +94,7 @@ function popd () {
 
 export_master_keys
 echo "=== CREATING ORGANISATION ==="
-pushd ./organisation
+pushd ./first-run/organisation
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//organisation"
 fi
@@ -104,7 +104,7 @@ ACCOUNT_ID=$(terragrunt output ${TG_SOURCE_MODULE} master_account_id)
 popd
 
 echo "=== CREATING MANAGEMENT ACCOUNT ==="
-pushd ./accounts/management
+pushd ./first-run/accounts/management
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//account"
 fi
@@ -113,7 +113,7 @@ terragrunt apply ${TG_SOURCE_MODULE}
 MANAGEMENT_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 echo "=== CREATING PRODUCTION ACCOUNT ==="
-pushd ./accounts/production
+pushd ./first-run/accounts/production
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//account"
 fi
@@ -122,7 +122,7 @@ terragrunt apply ${TG_SOURCE_MODULE}
 PRODUCTION_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 echo "=== CREATING STAGING ACCOUNT ==="
-pushd ./accounts/staging
+pushd ./first-run/accounts/staging
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//account"
 fi
@@ -132,7 +132,7 @@ STAGING_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 
 echo "=== CREATING terragrunt GROUP ==="
-pushd ./iam/groups/terragrunt
+pushd ./first-run/iam/groups/terragrunt
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/terragrunt"
 fi
@@ -141,7 +141,7 @@ terragrunt apply ${TG_SOURCE_MODULE}
 popd
 
 echo "=== CREATING terragrunt.gitlab USER ==="
-pushd ./iam/users/terragrunt-gitlab
+pushd ./first-run/iam/users/terragrunt-gitlab
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/terragrunt"
 fi
@@ -152,7 +152,7 @@ TERRAGRUNT_GITLAB_SECRET_KEY=$(terragrunt output ${TG_SOURCE_MODULE} terragrunt_
 popd
 
 echo "=== CREATING users GROUP ==="
-pushd ./iam/groups/users
+pushd ./first-run/iam/groups/users
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/users"
 fi
@@ -160,7 +160,7 @@ terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
 popd
 echo "=== CREATING administrators GROUP ==="
-pushd ./iam/groups/administrators
+pushd ./first-run/iam/groups/administrators
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/administrators"
 fi
@@ -168,7 +168,7 @@ terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
 popd
 echo "=== CREATING finance GROUP ==="
-pushd ./iam/groups/finance
+pushd ./first-run/iam/groups/finance
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/finance"
 fi
@@ -176,7 +176,7 @@ terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
 popd
 echo "=== CREATING developers GROUP ==="
-pushd ./iam/groups/developers
+pushd ./first-run/iam/groups/developers
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/developers"
 fi
@@ -185,7 +185,7 @@ terragrunt apply ${TG_SOURCE_MODULE}
 popd
 
 echo "=== CREATING ADMINISTRATOR USER ==="
-pushd ./iam/users/administrator
+pushd ./first-run/iam/users/administrator
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/administrator"
 fi
