@@ -1,6 +1,7 @@
 locals {
-  aws_region = "eu-west-2"
-  domain     = "domain.com"
+  aws_region    = "eu-west-2"
+  domain        = "domain.com"
+  admin_email   = "first.last@domain.com"
 }
 
 # Configure Terragrunt to automatically store tfstate files in an S3 bucket
@@ -18,6 +19,7 @@ remote_state {
 
 # Configure root level variables that all resources inherit
 inputs = {
+  admin_email                  = local.admin_email
   aws_region                   = local.aws_region
   domain                       = local.domain
   cloudtrail_bucket_name       = "cloudtrail.${local.domain}"

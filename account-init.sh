@@ -14,13 +14,14 @@ function usage {
     echo "DESCRIPTION:"
     echo "  Script for initializing a basic AWS account structure:"
     echo "  - An organisation will be configured"
-    echo "  - Management, Production and Staging accounts will be created"
+    echo "  - Management, Production and Staging sub-accounts will be created"
+    echo "  - Various groups, including administrators, developers, finance, terragrunt and users will be created"
     echo "  - An IAM user will be created in the Master organisation with the necessary permissions to run terragrunt"
+    echo "  - An IAM administrator user will be created"
     echo "  *** MUST BE INITIALLY RUN WITH CREDENTIALS FOR A SPECIALLY-PROVISIONED USER IN THE MASTER ACCOUNT ***"
-    echo "  *** THIS USER WILL BE DELETED AT THE END OF THE RUN, UNLESS OTHERWISE INSTRUCTED  ***"
     echo ""
     echo "USAGE:"
-    echo "  ${0} -a <access key> -s <secret key>  -k <keybase profile> [-l <local_modules_directory>] [-r <region>]"
+    echo "  ${0} -a <access key> -s <secret key> -k <keybase profile> [-l <local_modules_directory>] [-r <region>]"
     echo ""
     echo "OPTIONAL ARGUMENTS:"
     echo "  -l   Use a local folder as the source for Terragrunt modules e.g. ~/Code/terraform/modules"
@@ -181,6 +182,15 @@ if [[ -n "${TG_SOURCE}" ]]; then
 fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE}
+popd
+
+echo "=== CREATING ADMINISTRATOR USER ==="
+pushd ./iam/users/administrator
+if [[ -n "${TG_SOURCE}" ]]; then
+    TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/administrator"
+fi
+terragrunt init ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} -var keybase=${KEYBASE_PROFILE}
 popd
 
 
