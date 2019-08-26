@@ -191,12 +191,21 @@ if [[ -n "${TG_SOURCE}" ]]; then
 fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE} -var keybase=${KEYBASE_PROFILE}
+ADMIN_USERNAME=$(terragrunt output ${TG_SOURCE_MODULE} admin_username)
+ADMIN_PASSWORD=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_password | base64 --decode | keybase pgp decrypt)
+ADMIN_ACCESS_KEY=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_access_key)
+ADMIN_SECRET_KEY=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_secret_key | base64 --decode | keybase pgp decrypt)
 popd
 
 
 echo ""
 echo "=== INITIALISATION COMPLETE ==="
 echo "Console login: https://${ACCOUNT_ID}.signin.aws.amazon.com/console"
+echo "----------------------------------------------------------------"
+echo "Administrator username  : " $ADMIN_USERNAME
+echo "Administrator password  : " $ADMIN_PASSWORD
+echo "Administrator access key: " $ADMIN_ACCESS_KEY
+echo "Administrator secret key: " $ADMIN_SECRET_KEY
 echo "----------------------------------------------------------------"
 echo "terragrunt.gitlab access key: " $TERRAGRUNT_GITLAB_ACCESS_KEY
 echo "terragrunt.gitlab secret key: " $TERRAGRUNT_GITLAB_SECRET_KEY
