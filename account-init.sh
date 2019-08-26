@@ -84,6 +84,14 @@ function export_master_keys {
     export AWS_SECRET_ACCESS_KEY=${SECRET_KEY}
 }
 
+function export_admin_keys {
+    echo ""
+    echo "USING ADMIN CREDENTIALS"
+    echo ""
+    export AWS_ACCESS_KEY_ID=${ADMIN_ACCESS_KEY}
+    export AWS_SECRET_ACCESS_KEY=${ADMIN_SECRET_KEY}
+}
+
 function pushd () {
     command pushd "$@" > /dev/null
 }
@@ -196,6 +204,9 @@ ADMIN_PASSWORD=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_password | bas
 ADMIN_ACCESS_KEY=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_access_key)
 ADMIN_SECRET_KEY=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_secret_key | base64 --decode | keybase pgp decrypt)
 popd
+
+export_admin_keys
+terragrunt apply-all --terragrunt-exclude-dir first-run ${TG_SOURCE}
 
 
 echo ""
