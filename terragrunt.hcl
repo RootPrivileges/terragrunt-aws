@@ -18,7 +18,7 @@ remote_state {
 
 # Configure root level variables that all resources inherit
 inputs = {
-  admin_email                  = "aws.administrator@{local.domain}"
+  admin_email                  = "aws.administrator@${local.domain}"
   aws_region                   = local.aws_region
   domain                       = local.domain
   cloudtrail_bucket_name       = "cloudtrail.${local.domain}"
