@@ -213,7 +213,7 @@ ADMIN_SECRET_KEY=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_secret_key |
 popd
 
 export_admin_keys
-terragrunt apply-all --terragrunt-exclude-dir first-run ${TG_SOURCE}
+terragrunt apply-all -var keybase=${KEYBASE_PROFILE} --terragrunt-exclude-dir first-run ${TG_SOURCE}
 
 
 echo ""
