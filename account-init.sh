@@ -33,9 +33,10 @@ function usage {
     echo "  - Keybase"
 }
 
-while getopts "a:k:l:r:s:h" option; do
+while getopts "a:k:l:r:s:dh" option; do
     case ${option} in
         a ) ACCESS_KEY=$OPTARG;;
+        d ) DEV_MODE=1;;
         k ) KEYBASE_PROFILE=$OPTARG;;
         l ) LOCAL_MODULES_DIR=$OPTARG;;
         r ) DEFAULT_REGION=$OPTARG;;
@@ -51,6 +52,10 @@ while getopts "a:k:l:r:s:h" option; do
             ;;
     esac
 done
+
+if [ -z "$DEV_MODE" ]; then
+    DEV_MODE=0
+fi
 
 if [[ -z "${ACCESS_KEY}" ]]; then
     echo "Please provide the terragrunt.init user's access key with -a <access key>" 1>&2
@@ -213,7 +218,29 @@ ADMIN_SECRET_KEY=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_secret_key |
 popd
 
 export_admin_keys
-terragrunt apply-all -var keybase=${KEYBASE_PROFILE} --terragrunt-exclude-dir first-run ${TG_SOURCE}
+
+if [ "$DEV_MODE" -eq 0 ]; then
+    echo "=== DELETING terragrunt.init IAM USER ==="
+    pushd ./first-run/delete-terragrunt-init
+    if [[ -n "${TG_SOURCE}" ]]; then
+        TG_SOURCE_MODULE="${TG_SOURCE}//utility/import-unmanaged-iam-user"
+    fi
+    terragrunt init ${TG_SOURCE_MODULE}
+    terragrunt import ${TG_SOURCE_MODULE} aws_iam_policy.policy "arn:aws:iam::${ACCOUNT_ID}:policy/TerragruntInit"
+    terragrunt import ${TG_SOURCE_MODULE} aws_iam_user.user terragrunt.init
+    terragrunt import ${TG_SOURCE_MODULE} aws_iam_user_policy_attachment.attachment "terragrunt.init/arn:aws:iam::${ACCOUNT_ID}:policy/TerragruntInit"
+
+    # Well, this was super annoying... "terraform import" doesn't pick up force_destroy preventing the user being deleted due to unmanaged access keys
+    # https://github.com/terraform-providers/terraform-provider-aws/issues/7859
+    #
+    # Running apply makes terraform see that the force_destroy flag is set for the user, and updates accordingly
+    terragrunt apply ${TG_SOURCE_MODULE}
+
+    terragrunt destroy ${TG_SOURCE_MODULE}
+fi
+
+echo "=== COMPLETING ENVIRONMENT DEPLOYMENT==="
+terragrunt apply-all --terragrunt-exclude-dir first-run ${TG_SOURCE}
 
 
 echo ""
