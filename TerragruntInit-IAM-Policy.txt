@@ -151,7 +151,6 @@
                 "cloudtrail:UpdateTrail",
                 "cloudtrail:DescribeTrails",
                 "cloudtrail:ListTags",
-                "cloudtrail:DescribeTags",
                 "cloudtrail:GetTrailStatus",
                 "cloudtrail:GetEventSelectors"
             ],
