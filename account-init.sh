@@ -207,7 +207,7 @@ popd
 echo -e "\n=== CREATING ADMINISTRATOR USER ===\n"
 pushd ./iam/users/administrator
 if [[ -n "${TG_SOURCE}" ]]; then
-    TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/administrator"
+    TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/administrator-with-terragrunt"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE} -var keybase=${KEYBASE_PROFILE}
