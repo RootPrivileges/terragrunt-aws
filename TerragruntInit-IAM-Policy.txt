@@ -51,7 +51,9 @@
                 "iam:CreateRole",
                 "iam:ListAttachedRolePolicies",
                 "iam:AttachRolePolicy",
-                "iam:UpdateAssumeRolePolicy"
+                "iam:UpdateAssumeRolePolicy",
+                "iam:PutRolePolicy",
+                "iam:GetRolePolicy"
             ],
             "Resource": [
                 "arn:aws:iam::*:role/*"
@@ -156,6 +158,53 @@
             ],
             "Resource": [
                 "*"
+            ]
+        },
+        {
+            "Sid": "AllowCreateLogGroup",
+            "Effect": "Allow",
+            "Action": [
+                "logs:CreateLogGroup",
+                "logs:PutRetentionPolicy",
+                "logs:DescribeLogGroups",
+                "logs:ListTagsLogGroup",
+                "logs:DeleteLogGroup"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "AllowKMS",
+            "Effect": "Allow",
+            "Action": [
+                "kms:Create*",
+                "kms:Describe*",
+                "kms:Enable*",
+                "kms:List*",
+                "kms:Put*",
+                "kms:Update*",
+                "kms:Revoke*",
+                "kms:Disable*",
+                "kms:Get*",
+                "kms:Delete*",
+                "kms:TagResource",
+                "kms:UntagResource",
+                "kms:ScheduleKeyDeletion",
+                "kms:CancelKeyDeletion"
+            ],
+            "Resource": [
+                "*"
+            ]
+        },
+        {
+            "Sid": "AllowCloudWatchRole",
+            "Effect": "Allow",
+            "Action": [
+                "iam:PassRole"
+            ],
+            "Resource": [
+                "arn:aws:iam::*:role/MasterCloudtrailCloudWatchDeliveryRole"
             ]
         }
     ]
