@@ -1,6 +1,7 @@
 locals {
   aws_region = "eu-west-2"
   domain     = "domain.com"
+  keybase    = "keybase-username"
 }
 
 # Configure Terragrunt to automatically store tfstate files in an S3 bucket
@@ -22,6 +23,7 @@ inputs = {
   aws_region                   = local.aws_region
   domain                       = local.domain
   cloudtrail_bucket_name       = "cloudtrail.${local.domain}"
+  keybase                      = local.keybase
   tfstate_global_bucket        = "tfstate.${local.domain}"
   tfstate_global_bucket_region = local.aws_region
   tfstate_global_dynamodb      = "tflocks.${local.domain}"
