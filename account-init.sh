@@ -236,16 +236,16 @@ if [ "$DEV_MODE" -eq 0 ]; then
     fi
     terragrunt init ${TG_SOURCE_MODULE}
     terragrunt import ${TG_SOURCE_MODULE} aws_iam_policy.policy "arn:aws:iam::${ACCOUNT_ID}:policy/TerragruntInit"
-    terragrunt import ${TG_SOURCE_MODULE} aws_iam_user.user terragrunt.init
+    terragrunt import ${TG_SOURCE_MODULE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole" aws_iam_user.user terragrunt.init
     terragrunt import ${TG_SOURCE_MODULE} aws_iam_user_policy_attachment.attachment "terragrunt.init/arn:aws:iam::${ACCOUNT_ID}:policy/TerragruntInit"
 
     # Well, this was super annoying... "terraform import" doesn't pick up force_destroy preventing the user being deleted due to unmanaged access keys
     # https://github.com/terraform-providers/terraform-provider-aws/issues/7859
     #
     # Running apply makes terraform see that the force_destroy flag is set for the user, and updates accordingly
-    terragrunt apply ${TG_SOURCE_MODULE}
+    terragrunt apply ${TG_SOURCE_MODULE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole"
 
-    terragrunt destroy ${TG_SOURCE_MODULE}
+    terragrunt destroy ${TG_SOURCE_MODULE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole"
 fi
 
 echo -e "\n=== COMPLETING ENVIRONMENT DEPLOYMENT===\n"
