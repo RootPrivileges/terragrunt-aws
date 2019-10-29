@@ -55,6 +55,7 @@ done
 
 if [ -z "$DEV_MODE" ]; then
     DEV_MODE=0
+    AUTO_APPROVE="-auto-approve"
 fi
 
 if [[ -z "${ACCESS_KEY}" ]]; then
@@ -112,14 +113,14 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//utility/convert-to-organisation"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 popd
 pushd ./organisation
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//organisation"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 ACCOUNT_ID=$(terragrunt output ${TG_SOURCE_MODULE} master_account_id)
 popd
 
@@ -129,7 +130,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//account"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 MANAGEMENT_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 echo -e "\n=== CREATING PRODUCTION ACCOUNT ===\n"
@@ -138,7 +139,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//account"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 PRODUCTION_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 echo -e "\n=== CREATING STAGING ACCOUNT ===\n"
@@ -147,7 +148,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//account"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 STAGING_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 
@@ -157,7 +158,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//cloudtrail"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 popd
 
 echo -e "\n=== CREATING terragrunt GROUP ===\n"
@@ -166,7 +167,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/terragrunt"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 popd
 
 echo -e "\n=== CREATING terragrunt.gitlab USER ===\n"
@@ -175,7 +176,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/terragrunt"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE} -var keybase=${KEYBASE_PROFILE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE} -var keybase=${KEYBASE_PROFILE}
 TERRAGRUNT_GITLAB_ACCESS_KEY=$(terragrunt output ${TG_SOURCE_MODULE} terragrunt_user_access_key)
 TERRAGRUNT_GITLAB_SECRET_KEY=$(terragrunt output ${TG_SOURCE_MODULE} terragrunt_user_secret_key | base64 --decode | keybase pgp decrypt)
 popd
@@ -186,7 +187,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/users"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 popd
 echo -e "\n=== CREATING administrators GROUP ===\n"
 pushd ./iam/groups/administrators
@@ -194,7 +195,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/administrators"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 popd
 echo -e "\n=== CREATING finance GROUP ===\n"
 pushd ./iam/groups/finance
@@ -202,7 +203,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/finance"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 popd
 echo -e "\n=== CREATING developers GROUP ===\n"
 pushd ./iam/groups/developers
@@ -210,7 +211,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/groups/developers"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 popd
 
 echo -e "\n=== CREATING ADMINISTRATOR USER ===\n"
@@ -219,7 +220,7 @@ if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/administrator-with-terragrunt"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE} -var keybase=${KEYBASE_PROFILE}
+terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE} -var keybase=${KEYBASE_PROFILE}
 ADMIN_USERNAME=$(terragrunt output ${TG_SOURCE_MODULE} admin_username)
 ADMIN_PASSWORD=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_password | base64 --decode | keybase pgp decrypt)
 ADMIN_ACCESS_KEY=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_access_key)
@@ -243,9 +244,9 @@ if [ "$DEV_MODE" -eq 0 ]; then
     # https://github.com/terraform-providers/terraform-provider-aws/issues/7859
     #
     # Running apply makes terraform see that the force_destroy flag is set for the user, and updates accordingly
-    terragrunt apply ${TG_SOURCE_MODULE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole"
+    terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole"
 
-    terragrunt destroy ${TG_SOURCE_MODULE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole"
+    terragrunt destroy ${TG_SOURCE_MODULE} ${AUTO_APPROVE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole"
 fi
 
 echo -e "\n=== COMPLETING ENVIRONMENT DEPLOYMENT===\n"
