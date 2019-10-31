@@ -245,6 +245,7 @@ if [ "$DEV_MODE" -eq 0 ]; then
     terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole"
 
     terragrunt destroy ${TG_SOURCE_MODULE} ${AUTO_APPROVE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole"
+    popd
 fi
 
 echo -e "\n=== COMPLETING ENVIRONMENT DEPLOYMENT===\n"
