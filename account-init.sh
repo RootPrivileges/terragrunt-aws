@@ -152,15 +152,6 @@ terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 STAGING_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 
-echo -e "\n=== ENABLING CLOUDTRAIL AUDITING ===\n"
-pushd ./cloudtrail
-if [[ -n "${TG_SOURCE}" ]]; then
-    TG_SOURCE_MODULE="${TG_SOURCE}//cloudtrail"
-fi
-terragrunt init ${TG_SOURCE_MODULE}
-terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
-popd
-
 echo -e "\n=== CREATING terragrunt GROUP ===\n"
 pushd ./iam/groups/terragrunt
 if [[ -n "${TG_SOURCE}" ]]; then
