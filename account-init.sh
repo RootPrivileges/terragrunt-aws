@@ -240,7 +240,7 @@ if [ "$DEV_MODE" -eq 0 ]; then
 fi
 
 echo -e "\n=== COMPLETING ENVIRONMENT DEPLOYMENT===\n"
-terragrunt apply-all --terragrunt-exclude-dir first-run --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole" ${TG_SOURCE}
+terragrunt apply-all --terragrunt-exclude-dir "first-run/*" --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole" ${TG_SOURCE}
 
 
 echo -e "\n=== INITIALISATION COMPLETE ==="
