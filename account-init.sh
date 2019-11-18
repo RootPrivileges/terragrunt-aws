@@ -264,3 +264,5 @@ echo "Administrator secret key         : " $ADMIN_SECRET_KEY
 echo "----------------------------------------------------------------"
 echo "terragrunt.gitlab access key     : " $TERRAGRUNT_GITLAB_ACCESS_KEY
 echo "terragrunt.gitlab secret key     : " $TERRAGRUNT_GITLAB_SECRET_KEY
+
+echo -e "\nDon't forget to accept the Consolidated Billing alarm subscription in the email inbox of $ADMIN_USERNAME!"

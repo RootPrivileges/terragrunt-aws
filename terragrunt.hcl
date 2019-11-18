@@ -1,7 +1,9 @@
 locals {
-  aws_region = "eu-west-2"
-  domain     = "domain.com"
-  keybase    = "keybase-username"
+  aws_region              = "eu-west-2"
+  billing_alarm_currency  = "USD"
+  billing_alarm_threshold = "1"
+  domain                  = "domain.com"
+  keybase                 = "keybase-username"
 }
 
 # Configure Terragrunt to automatically store tfstate files in an S3 bucket
@@ -22,6 +24,8 @@ inputs = {
   admin_email                  = "aws.administrator@${local.domain}"
   audit_logs_bucket_name       = "logging.${local.domain}"
   aws_region                   = local.aws_region
+  billing_alarm_currency       = local.billing_alarm_currency
+  billing_alarm_threshold      = local.billing_alarm_threshold
   domain                       = local.domain
   cloudtrail_bucket_name       = "cloudtrail.${local.domain}"
   keybase                      = local.keybase
