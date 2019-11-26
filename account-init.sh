@@ -110,7 +110,7 @@ export_master_keys
 echo -e "\n=== CREATING ORGANISATION ===\n"
 pushd ./first-run/convert-to-organisation
 if [[ -n "${TG_SOURCE}" ]]; then
-    TG_SOURCE_MODULE="${TG_SOURCE}//utility/convert-to-organisation"
+    TG_SOURCE_MODULE="${TG_SOURCE}//utility/organisation/convert-to-organisation"
 fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
@@ -224,7 +224,7 @@ if [ "$DEV_MODE" -eq 0 ]; then
     echo -e "\n=== DELETING terragrunt.init IAM USER ===\n"
     pushd ./first-run/delete-terragrunt-init
     if [[ -n "${TG_SOURCE}" ]]; then
-        TG_SOURCE_MODULE="${TG_SOURCE}//utility/import-unmanaged-iam-user"
+        TG_SOURCE_MODULE="${TG_SOURCE}//utility/iam/import-unmanaged-iam-user"
     fi
     terragrunt init ${TG_SOURCE_MODULE}
     terragrunt import ${TG_SOURCE_MODULE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole" aws_iam_user.user terragrunt.init
