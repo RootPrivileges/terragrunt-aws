@@ -13,5 +13,4 @@ include {
 inputs = {
   account_name       = "staging"
   account_email_slug = "aws.staging"
-  vpc_cidr_block     = "10.20.0.0/16"
 }
