@@ -1,7 +1,7 @@
 locals {
   aws_region              = "eu-west-2"
   billing_alarm_currency  = "USD"
-  billing_alarm_threshold = "1"
+  billing_alarm_threshold = "5"
   domain                  = "domain.com"
   keybase                 = "keybase-username"
 }
