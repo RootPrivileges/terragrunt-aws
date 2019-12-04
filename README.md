@@ -62,7 +62,6 @@ All of these buckets have public access blocked.
 - Terraform >= 0.12, on path
 - Terragrunt >= v0.9.14, on path
 - Keybase, installed locally and authenticated
-- aws-cli, on path (used to enable email subscriptions on billing alerts, which cannot be done within native Terraform modules)
 
 ## Execution
 
