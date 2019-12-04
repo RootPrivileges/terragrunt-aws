@@ -1,7 +1,7 @@
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "git::git@github.com:rootprivileges/terragrunt-aws-modules.git//iam/groups/terragrunt"
+  source = "git::git@github.com:rootprivileges/terragrunt-aws-modules.git//iam/groups/terragrunt?ref=v0.1.0"
 }
 
 # Include all settings from the root terragrunt.hcl file
