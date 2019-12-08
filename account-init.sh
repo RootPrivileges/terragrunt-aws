@@ -162,7 +162,7 @@ terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 popd
 
 echo -e "\n=== CREATING terragrunt.gitlab USER ===\n"
-pushd ./iam/users/terragrunt-gitlab
+pushd ./iam/users/terragrunt-ci
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/terragrunt"
 fi
