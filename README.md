@@ -6,7 +6,9 @@ This script is designed to set up a opinionated, repeatable minimal AWS deployme
 
 Additionally, the installation will be hardened in line with various security recommendations, with MFA enforced on user accounts, the use of IAM Assume roles to grant privileges in the various sub-accounts, CloudTrail, AWS Config and GuardDuty enabled in all regions, and the default VPC hardened by removing default routes and enabling Flow Logs.
 
-The deployed infrastructure does not only make use of Free Tier components, as it is designed to deploy a baseline practical infrastructure to enable faster time to a productive environment, rather than as a demonstration, or reference architecture of "what could be". However, alternatively, the deployment has been designed with the Free support plan in mind, and does not need AWS Support to increase any resource limitations in order to deploy initially.
+The deployed infrastructure does not only make use of Free Tier components, as it is designed to deploy a baseline practical infrastructure to enable faster time to a productive environment; rather than as a demonstration, or reference architecture of "what could be". However, alternatively, the deployment has been designed with the Free support plan in mind, and does not need AWS Support to increase any resource limitations in order to complete initial deployment.
+
+By far the largest cost, in the basic deployment, is the management NAT gateway, which (currently) costs ~\$1.10/day. Adding additional gateways into the production and staging environments will duplicate these costs accordingly. As of Jan 2020, running this script, with no modifications, will charge the credit card associated with the Master account ~\$50/month.
 
 ### Standing on the shoulders of giants
 
@@ -18,11 +20,11 @@ This repository is primarily based on the (now-outdated) script at https://githu
 
 On top of this starting point, the production-grade guide series at https://gruntwork.io/guides/ further details the principles that have influenced multiple design decisions, as well as reuse of the [AWS Secure-Baseline Terraform modules](https://registry.terraform.io/modules/nozaq/secure-baseline/) from [nozaq](https://github.com/nozaq/).
 
-One break from traditional AWS security hardening guidance, is that there is no dedicated Security account to hold IAM users and audit data. This is instead held within the initial Organisation account.
+One break from traditional AWS security hardening guidance, is that there is no dedicated Security account to hold IAM users and audit data. This is instead held within the initial Organisation account. This is to ensure that manual intervention of AWS Support is not required (I have encountered issues attempting to create a fourth child account on a brand-new Master account).
 
 ## Description
 
-After converting the initial AWS account into an organisation, the following accounts are created within the organisation for holding AWS resources:
+After converting the initial AWS account into an organisation, the following accounts are created within that organisation for holding AWS resources:
 
 - Production
 - Staging
@@ -45,7 +47,7 @@ The following groups are provisioned:
 Users are created in IAM within the Master organisation:
 
 - An initial user is created using the provided username and email address, with administrator privileges in the Master organisation
-- A `terragrunt.gitlab` user in the Terragrunt group is also created, for use in CI/CD pipelines
+- A `terragrunt.ci` user in the Terragrunt group is also created, for use in CI/CD pipelines
 
 After creation of a user (using Terraform, the console or the CLI), they will need to sign in and add an MFA token to their account before they can perform most actions (including assuming roles).
 
@@ -89,6 +91,30 @@ All of these buckets have public access blocked.
 
 ```
 ./account-init.sh -a <access key> -s <secret key> -k <keybase profile>
+```
+
+- The script may error during initial execution, as some modules timeout on first deployment. Repeatedly re-running the script will put the environment into the defined state, and this is only really an issue on intial run.
+
+10. Running the script is only needed for initial provisioning of the accounts.
+
+Future environment updates can usually be handled by setting environment variables:
+
+```
+export AWS_DEFAULT_REGION="<region>"
+export AWS_ACCESS_KEY_ID ="<access key>
+export AWS_SECRET_ACCESS_KEY="<secret key>"
+```
+
+and then either:
+
+```
+cd environments
+terragrunt apply-all --terragrunt-iam-role "arn:aws:iam::<account id>:role/MasterTerragruntAdministratorAccessRole"
+```
+
+```
+cd environments/<environment>/<region>/<availability zone>/<module>
+terragrunt apply --terragrunt-iam-role "arn:aws:iam::<account id>:role/MasterTerragruntAdministratorAccessRole"
 ```
 
 ### Optional flags
