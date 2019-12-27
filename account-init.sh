@@ -33,6 +33,29 @@ function usage {
     echo "  - Keybase"
 }
 
+function check_prereqs {
+    MISSING_PREREQ=0
+
+    if ! [ -x "$(command -v terraform)" ]; then
+        echo "Script requires terraform, but it is not installed.  Aborting."
+        MISSING_PREREQ=1
+    fi
+    if ! [ -x "$(command -v terragrunt)" ]; then
+        echo "Script requires terragrunt, but it is not installed.  Aborting."
+        MISSING_PREREQ=1
+    fi
+    if ! [ -x "$(command -v keybase)" ]; then
+        echo "Script requires keybase, but it is not installed.  Aborting."
+        MISSING_PREREQ=1
+    fi
+
+    if [[ "${MISSING_PREREQ}" -gt 0 ]]; then
+        exit 1
+    fi
+}
+
+check_prereqs
+
 while getopts "a:k:l:r:s:dh" option; do
     case ${option} in
         a ) ACCESS_KEY=$OPTARG;;
