@@ -10,6 +10,8 @@ The deployed infrastructure does not only make use of Free Tier components, as i
 
 By far the largest cost, in the basic deployment, is the management NAT gateway, which (currently) costs ~\$1.10/day. Adding additional gateways into the production and staging environments will duplicate these costs accordingly. As of Jan 2020, running this script, with no modifications, will charge the credit card associated with the Master account ~\$50/month.
 
+As a basic environment deployment, I consider this repository to be pretty much feature-complete, with only minor changes occurring as I either notice obvious errors or restructure based on work fleshing out the [demonstration repository](https://github.com/RootPrivileges/terragrunt-aws-demo). That repository is forked from this, and is intended to be used as a reference for a practical deployment into AWS for a organisation with no legacy on-premise systems.
+
 ### Standing on the shoulders of giants
 
 This repository is primarily based on the (now-outdated) script at https://github.com/liatrio/aws-accounts-terraform, and builds upon the work detailed in the following blog posts:
@@ -93,7 +95,12 @@ All of these buckets have public access blocked.
 ./account-init.sh -a <access key> -s <secret key> -k <keybase profile>
 ```
 
-- The script may error during initial execution, as some modules timeout on first deployment. Repeatedly re-running the script will put the environment into the defined state, and this is only really an issue on intial run.
+- The script may error during initial execution, as some modules timeout on first deployment. Repeatedly re-running the script will put the environment into the defined state, so this is only really an issue on initial run.
+
+  - In particular, CloudWatch modules on child accounts like to complain with either:
+    - "The AWS Access Key Id needs a subscription for the service", or
+    - "OptInRequired: You are not subscribed to this service. Please go to http://aws.amazon.com to subscribe."
+  - The time it takes to re-execute the script down to the same module a second time around is (usually) enough time the subscription to propogate through Amazon's infrastructure and succeed.
 
 10. Running the script is only needed for initial provisioning of the accounts.
 
