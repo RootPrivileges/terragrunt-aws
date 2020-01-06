@@ -285,5 +285,5 @@ echo "Administrator password           : " $ADMIN_PASSWORD
 echo "Administrator access key         : " $ADMIN_ACCESS_KEY
 echo "Administrator secret key         : " $ADMIN_SECRET_KEY
 echo "----------------------------------------------------------------"
-echo "terragrunt.gitlab access key     : " $TERRAGRUNT_GITLAB_ACCESS_KEY
-echo "terragrunt.gitlab secret key     : " $TERRAGRUNT_GITLAB_SECRET_KEY
+echo "terragrunt.ci access key         : " $TERRAGRUNT_GITLAB_ACCESS_KEY
+echo "terragrunt.ci secret key         : " $TERRAGRUNT_GITLAB_SECRET_KEY
