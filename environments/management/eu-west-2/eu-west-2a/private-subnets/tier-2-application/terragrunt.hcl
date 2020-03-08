@@ -10,14 +10,14 @@ include {
 }
 
 dependencies {
-  paths = ["../../../_vpc", "../../public-subnets/tier-1-public"]
+  paths = ["../../../_vpc", "../../public-subnets/tier-1-dmz"]
 }
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   acl_rule_number               = 10
   public_subnet_acl_rule_number = 10
-  public_subnet_name            = "tier-1-public"
+  public_subnet_name            = "tier-1-dmz"
   subnet_cidr                   = "10.200.110.0/24"
   subnet_name                   = "${basename(basename(get_terragrunt_dir()))}"
 }
