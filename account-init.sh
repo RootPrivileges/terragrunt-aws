@@ -145,6 +145,8 @@ fi
 terragrunt init ${TG_SOURCE_MODULE}
 terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE}
 ACCOUNT_ID=$(terragrunt output ${TG_SOURCE_MODULE} master_account_id)
+SUPPORT_USERNAME=$(terragrunt output ${TG_SOURCE_MODULE} support_user_name)
+SUPPORT_PASSWORD=$(terragrunt output ${TG_SOURCE_MODULE} support_user_password | base64 --decode | keybase pgp decrypt)
 popd
 
 echo -e "\n=== CREATING MANAGEMENT ACCOUNT ===\n"
@@ -272,6 +274,7 @@ echo "----------------------------------------------------------------"
 echo "Role Switch Links"
 echo "Master Administrator             :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterAdministratorAccessRole&displayName=Master%20-%20Administrator"
 echo "Master Billing                   :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterBillingAccessRole&displayName=Master%20-%20Billing"
+echo "Master Support                   :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterSupportRole&displayName=Master%20-%20Support"
 echo "Master Terragrunt Administrator  :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterTerragruntAdministratorAccessRole&displayName=Master%20-%20Terragrunt%20Administrator"
 echo "Master Terragrunt Data Admin     :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterTerragruntDataAdministratorAccessRole&displayName=Master%20-%20Terragrunt%20Data%20Admin"
 echo "Master Terragrunt Data Read      :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterTerragruntDataReaderAccessRole&displayName=Master%20-%20Terragrunt%20Data%20Read"
@@ -287,3 +290,6 @@ echo "Administrator secret key         : " $ADMIN_SECRET_KEY
 echo "----------------------------------------------------------------"
 echo "terragrunt.ci access key         : " $TERRAGRUNT_GITLAB_ACCESS_KEY
 echo "terragrunt.ci secret key         : " $TERRAGRUNT_GITLAB_SECRET_KEY
+echo "----------------------------------------------------------------"
+echo "Support username                 : " $SUPPORT_USERNAME
+echo "Support password                 : " $SUPPORT_PASSWORD
