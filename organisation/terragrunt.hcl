@@ -9,7 +9,11 @@ include {
   path = find_in_parent_folders()
 }
 
+dependency "first_run" {
+  config_path = "../first-run/convert-to-organisation"
+}
+
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-
+  organisation_admin_role_policy_arn = dependency.first_run.outputs.organisation_admin_role_policy_arn
 }
