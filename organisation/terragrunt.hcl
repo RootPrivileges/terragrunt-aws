@@ -15,5 +15,5 @@ dependency "first_run" {
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-    organisation_admin_role_policy_arn = dependency.first_run.outputs.organisation_admin_role_policy_arn
+  organisation_admin_role_policy_arn = dependency.first_run.outputs.organisation_admin_role_policy_arn
 }
