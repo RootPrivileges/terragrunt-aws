@@ -1,3 +1,3 @@
 locals {
-  empty = "empty"
+    empty = "empty"
 }
