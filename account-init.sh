@@ -144,7 +144,10 @@ popd
 
 
 echo -e "\n=== DEPLOYING INFRASTRUCTURE ===\n"
-terragrunt apply-all --terragrunt-exclude-dir "first-run/*" ${TG_SOURCE}
+if [[ -n "${AUTO_APPROVE}" ]]; then
+    AUTO_APPROVE="--terragrunt-non-interactive"
+fi
+terragrunt apply-all --terragrunt-exclude-dir "first-run/*" ${TG_SOURCE} ${AUTO_APPROVE}
 
 
 echo -e "\n=== COLLECTING OUTPUTS ===\n"
