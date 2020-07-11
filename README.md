@@ -159,3 +159,13 @@ terragrunt apply --terragrunt-iam-role "arn:aws:iam::<account id>:role/MasterTer
 
 - To use a local folder as the source of the modules, add `-l <path to modules>`
 - To override the default AWS region, use `-r`
+
+### Cleaning up
+
+To minimise costs during development, the following command will move from the repository root into the `environments` folder and delete all resources:
+
+```
+cd environments && terragrunt destroy-all --terragrunt-ignore-external-dependencies --terragrunt-non-interactive --terragrunt-iam-role "arn:aws:iam::<account id>:role/MasterTerragruntAdministratorAccessRole"; cd ..
+```
+
+(Note to self: It's probably best to keep the `cd` bookends to ensure you don't start trying to delete all the other resources (i.e. AWS accounts, IAM users/groups...), unless you're __really__ sure that's what you want to do!)
