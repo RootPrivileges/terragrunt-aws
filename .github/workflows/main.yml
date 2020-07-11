@@ -22,3 +22,7 @@ jobs:
         uses: devops-infra/action-format-hcl@master
         with:
           check: true
+          dir: "/github/workspace"
+          list: true
+          recursive: true
+          write: false
