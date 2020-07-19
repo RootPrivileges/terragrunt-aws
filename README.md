@@ -8,7 +8,7 @@ Additionally, the installation will be hardened in line with various security re
 
 The deployed infrastructure does not only make use of Free Tier components, as it is designed to deploy a baseline practical infrastructure to enable faster time to a productive environment; rather than as a demonstration, or reference architecture of "what could be". However, alternatively, the deployment has been designed with the Free support plan in mind, and does not need AWS Support to increase any resource limitations in order to complete initial deployment.
 
-By far the largest cost, in the basic deployment, is the management NAT gateway, which (currently) costs ~\$1.10/day. Adding additional gateways into the production and staging environments will duplicate these costs accordingly. As of Jan 2020, running this script, with no modifications, will charge the credit card associated with the Master account ~\$50/month.
+By far the largest cost, in the basic deployment, is the management NAT gateway, which (currently) costs ~\$1.10/day. Adding additional gateways into the production and pre-production environments will duplicate these costs accordingly. As of Jan 2020, running this script, with no modifications, will charge the credit card associated with the Master account ~\$50/month.
 
 As a basic environment deployment, I consider this repository to be pretty much feature-complete, with only minor changes occurring as I either notice obvious errors or restructure based on work fleshing out the [demonstration repository](https://github.com/RootPrivileges/terragrunt-aws-demo). That repository is forked from this, and is intended to be used as a reference for a practical deployment into AWS for a organisation with no legacy on-premise systems.
 
@@ -29,7 +29,7 @@ One break from traditional AWS security hardening guidance, is that there is no 
 After converting the initial AWS account into an organisation, the following accounts are created within that organisation for holding AWS resources:
 
 - Production
-- Staging
+- Preprod
 - Management - for supporting services, such as VPN servers, bastion hosts and CI/CD servers
 
 The following groups are provisioned:
@@ -42,7 +42,7 @@ The following groups are provisioned:
   - Administrator access to Master IAM
   - Administrator access to the three sub-accounts
 - Developers
-  - Administrator access to the Staging account
+  - Administrator access to the Preprod account
 - Accounting
   - Access to Billing in the AWS console
 
@@ -168,4 +168,4 @@ To minimise costs during development, the following command will move from the r
 cd environments && terragrunt destroy-all --terragrunt-ignore-external-dependencies --terragrunt-non-interactive --terragrunt-iam-role "arn:aws:iam::<account id>:role/MasterTerragruntAdministratorAccessRole"; cd ..
 ```
 
-(Note to self: It's probably best to keep the `cd` bookends to ensure you don't start trying to delete all the other resources (i.e. AWS accounts, IAM users/groups...), unless you're __really__ sure that's what you want to do!)
+(Note to self: It's probably best to keep the `cd` bookends to ensure you don't start trying to delete all the other resources (i.e. AWS accounts, IAM users/groups...), unless you're **really** sure that's what you want to do!)
