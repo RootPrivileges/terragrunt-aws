@@ -21,7 +21,7 @@ dependency "production_account" {
   config_path = "../../../accounts/production"
 }
 
-dependency "staging_account" {
+dependency "preprod_account" {
   config_path = "../../../accounts/preprod"
 }
 
@@ -31,6 +31,6 @@ inputs = {
   billing_role_policy_arn                       = dependency.organisation.outputs.master_billing_role_policy_arn
   management_admin_role_policy_arn              = dependency.management_account.outputs.admin_role_policy_arn
   organisation_admin_role_policy_arn            = dependency.organisation.outputs.organisation_admin_role_policy_arn
+  preprod_admin_role_policy_arn                 = dependency.preprod_account.outputs.admin_role_policy_arn
   production_admin_role_policy_arn              = dependency.production_account.outputs.admin_role_policy_arn
-  staging_admin_role_policy_arn                 = dependency.staging_account.outputs.admin_role_policy_arn
 }

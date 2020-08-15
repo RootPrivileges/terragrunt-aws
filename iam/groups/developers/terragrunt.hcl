@@ -9,12 +9,12 @@ include {
   path = find_in_parent_folders()
 }
 
-dependency "staging_account" {
+dependency "preprod_account" {
   config_path = "../../../accounts/preprod"
 }
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  staging_account_id   = dependency.staging_account.outputs.account_id
-  staging_account_name = dependency.staging_account.outputs.account_name
+  preprod_account_id   = dependency.preprod_account.outputs.account_id
+  preprod_account_name = dependency.preprod_account.outputs.account_name
 }

@@ -21,7 +21,7 @@ dependency "production_account" {
   config_path = "../../../accounts/production"
 }
 
-dependency "staging_account" {
+dependency "preprod_account" {
   config_path = "../../../accounts/preprod"
 }
 
@@ -30,6 +30,6 @@ inputs = {
   assume_terragrunt_administrator_role_policy_arn = dependency.organisation.outputs.assume_terragrunt_administrator_role_policy_arn
   management_org_account_access_role_policy_arn   = dependency.management_account.outputs.org_account_access_role_policy_arn
   production_org_account_access_role_policy_arn   = dependency.production_account.outputs.org_account_access_role_policy_arn
-  staging_org_account_access_role_policy_arn      = dependency.staging_account.outputs.org_account_access_role_policy_arn
+  preprod_org_account_access_role_policy_arn      = dependency.preprod_account.outputs.org_account_access_role_policy_arn
   terragrunt_data_administrator_policy_arn        = dependency.organisation.outputs.terragrunt_data_administrator_policy_arn
 }
