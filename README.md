@@ -61,6 +61,10 @@ Multiple S3 buckets are created:
 
 All of these buckets have public access blocked.
 
+### A quick note on module version locking
+
+This repository uses modules from the master branch of [the associated modules repository](https://github.com/RootPrivileges/terragrunt-aws-modules). A decision has been made to always use HEAD of the master branch to reduce the rapidly-growing number of "bumped version to vX.Y.Z" commits that were happening on this repository. In production-use, it would be best-practise to add the `?ref=vX.Y.Z` tag at the end of each of the module imports, to ensure that a known-good version is called during execution.
+
 ## Prerequisites
 
 - Terraform >= 0.12, on path
