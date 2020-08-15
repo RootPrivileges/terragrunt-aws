@@ -10,7 +10,7 @@ include {
 }
 
 dependency "staging_account" {
-  config_path = "../../../accounts/staging"
+  config_path = "../../../accounts/preprod"
 }
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above

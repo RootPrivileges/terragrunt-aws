@@ -14,7 +14,7 @@ function usage {
     echo "DESCRIPTION:"
     echo "  Script for initializing a basic AWS account structure:"
     echo "  - An organisation will be configured"
-    echo "  - Management, Production and Staging sub-accounts will be created"
+    echo "  - Management, Production and Preprod sub-accounts will be created"
     echo "  - Various groups, including administrators, developers, finance, terragrunt and users will be created"
     echo "  - An IAM user will be created in the Master organisation with the necessary permissions to run terragrunt"
     echo "  - An IAM administrator user will be created"
@@ -174,11 +174,11 @@ fi
 PRODUCTION_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 
-pushd ./accounts/staging
+pushd ./accounts/preprod
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//account"
 fi
-STAGING_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
+PREPROD_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 popd
 
 pushd ./iam/users/terragrunt-ci
@@ -234,8 +234,8 @@ echo "Master Terragrunt Data Admin     :  https://signin.aws.amazon.com/switchro
 echo "Master Terragrunt Data Read      :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterTerragruntDataReaderAccessRole&displayName=Master%20-%20Terragrunt%20Data%20Read"
 echo "Management Administrator         :  https://signin.aws.amazon.com/switchrole?account=${MANAGEMENT_ID}&roleName=ManagementAdministratorAccessRole&displayName=Management%20-%20Administrator"
 echo "Production Administrator         :  https://signin.aws.amazon.com/switchrole?account=${PRODUCTION_ID}&roleName=ProductionAdministratorAccessRole&displayName=Production%20-%20Administrator"
-echo "Staging Administrator            :  https://signin.aws.amazon.com/switchrole?account=${STAGING_ID}&roleName=StagingAdministratorAccessRole&displayName=Staging%20-%20Administrator"
-echo "Staging Power User               :  https://signin.aws.amazon.com/switchrole?account=${STAGING_ID}&roleName=StagingPowerUserAccessRole&displayName=Staging%20-%20Power%20User"
+echo "Preprod Administrator            :  https://signin.aws.amazon.com/switchrole?account=${STAGING_ID}&roleName=PreprodAdministratorAccessRole&displayName=Preprod%20-%20Administrator"
+echo "Preprod Power User               :  https://signin.aws.amazon.com/switchrole?account=${STAGING_ID}&roleName=PreprodPowerUserAccessRole&displayName=Preprod%20-%20Power%20User"
 echo "----------------------------------------------------------------"
 echo "Administrator username           : " $ADMIN_USERNAME
 echo "Administrator password           : " $ADMIN_PASSWORD
