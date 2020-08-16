@@ -8,7 +8,7 @@ Additionally, the installation will be hardened in line with various security re
 
 The deployed infrastructure does not only make use of Free Tier components, as it is designed to deploy a baseline practical infrastructure to enable faster time to a productive environment; rather than as a demonstration, or reference architecture of "what could be". However, alternatively, the deployment has been designed with the Free support plan in mind, and does not need AWS Support to increase any resource limitations in order to complete initial deployment.
 
-By far the largest cost, in the basic deployment, is the management NAT gateway, which (currently) costs ~\$1.10/day. Adding additional gateways into the production and pre-production environments will duplicate these costs accordingly. As of Jan 2020, running this script, with no modifications, will charge the credit card associated with the Master account ~\$50/month.
+By far the largest cost, in the basic deployment, is the management NAT gateway, which (currently) costs ~\$1.10/day. Adding additional gateways into the production and pre-production environments will duplicate these costs accordingly. As of Jan 2020, running this script, with no modifications, will charge the credit card associated with the Organisation account ~\$50/month.
 
 As a basic environment deployment, I consider this repository to be pretty much feature-complete, with only minor changes occurring as I either notice obvious errors or restructure based on work fleshing out the [demonstration repository](https://github.com/RootPrivileges/terragrunt-aws-demo). That repository is forked from this, and is intended to be used as a reference for a practical deployment into AWS for a organisation with no legacy on-premise systems.
 
@@ -22,7 +22,7 @@ This repository is primarily based on the (now-outdated) script at https://githu
 
 On top of this starting point, the production-grade guide series at https://gruntwork.io/guides/ further details the principles that have influenced multiple design decisions, as well as reuse of the [AWS Secure-Baseline Terraform modules](https://registry.terraform.io/modules/nozaq/secure-baseline/) from [nozaq](https://github.com/nozaq/).
 
-One break from traditional AWS security hardening guidance, is that there is no dedicated Security account to hold IAM users and audit data. This is instead held within the initial Organisation account. This is to ensure that manual intervention of AWS Support is not required (I have encountered issues attempting to create a fourth child account on a brand-new Master account).
+One break from traditional AWS security hardening guidance, is that there is no dedicated Security account to hold IAM users and audit data. This is instead held within the initial Organisation account. This is to ensure that manual intervention of AWS Support is not required (I have encountered issues attempting to create a fourth child account on a brand-new Organisation account).
 
 ## Description
 
@@ -35,20 +35,20 @@ After converting the initial AWS account into an organisation, the following acc
 The following groups are provisioned:
 
 - Administrators
-  - Administrator access to Master organisation
+  - Administrator access to Organisation account
   - Administrator access to the 3 sub-accounts
   - Access to Billing in the AWS console
 - Terragrunt
-  - Administrator access to Master IAM
+  - Administrator access to Organisation IAM
   - Administrator access to the three sub-accounts
 - Developers
   - Administrator access to the Preprod account
 - Accounting
   - Access to Billing in the AWS console
 
-Users are created in IAM within the Master organisation:
+Users are created in IAM within the organisation:
 
-- An initial user is created using the provided username and email address, with administrator privileges in the Master organisation
+- An initial user is created using the provided username and email address, with administrator privileges in all organisation accounts
 - A `terragrunt.ci` user in the Terragrunt group is also created, for use in CI/CD pipelines
 
 After creation of a user (using Terraform, the console or the CLI), they will need to sign in and add an MFA token to their account before they can perform most actions (including assuming roles).
@@ -73,10 +73,10 @@ This repository uses modules from the master branch of [the associated modules r
 
 ## Execution
 
-1. Create a new AWS account to become the master Organisation:
+1. Create a new AWS account that will become the Organisation:
 
-- Ideally, use email address of aws.master@domain.com to keep in line with other (default) values on accounts created by the script
-- Set account name as "master", to keep this in line with other account names
+- Ideally, use email address of aws.organisation@domain.com to keep in line with other (default) values on accounts created by the script
+- Set account name as "organisation", to keep this in line with other account names
 
 <p align="center">
   <img src="https://i.imgur.com/LcQBrF6l.png">
@@ -151,12 +151,12 @@ and then either:
 
 ```
 cd environments
-terragrunt apply-all --terragrunt-iam-role "arn:aws:iam::<account id>:role/MasterTerragruntAdministratorAccessRole"
+terragrunt apply-all --terragrunt-iam-role "arn:aws:iam::<account id>:role/OrgTerragruntAdministratorAccessRole"
 ```
 
 ```
 cd environments/<environment>/<region>/<availability zone>/<module>
-terragrunt apply --terragrunt-iam-role "arn:aws:iam::<account id>:role/MasterTerragruntAdministratorAccessRole"
+terragrunt apply --terragrunt-iam-role "arn:aws:iam::<account id>:role/OrgTerragruntAdministratorAccessRole"
 ```
 
 ### Optional flags

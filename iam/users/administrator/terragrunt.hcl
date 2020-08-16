@@ -13,6 +13,14 @@ dependency "organisation" {
   config_path = "../../../organisation"
 }
 
+dependency "administrators_group" {
+  config_path  = "../../groups/administrators"
+}
+
+dependency "terragrunt_group" {
+  config_path  = "../../groups/terragrunt"
+}
+
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
 

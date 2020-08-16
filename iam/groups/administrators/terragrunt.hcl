@@ -28,7 +28,7 @@ dependency "preprod_account" {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   assume_terragrunt_data_reader_role_policy_arn = dependency.organisation.outputs.assume_terragrunt_data_reader_role_policy_arn
-  billing_role_policy_arn                       = dependency.organisation.outputs.master_billing_role_policy_arn
+  billing_role_policy_arn                       = dependency.organisation.outputs.billing_role_policy_arn
   management_admin_role_policy_arn              = dependency.management_account.outputs.admin_role_policy_arn
   organisation_admin_role_policy_arn            = dependency.organisation.outputs.organisation_admin_role_policy_arn
   preprod_admin_role_policy_arn                 = dependency.preprod_account.outputs.admin_role_policy_arn

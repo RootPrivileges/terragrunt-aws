@@ -19,6 +19,6 @@ inputs = {
   account_email_slug    = "aws.production"
   audit_logs_bucket_arn = dependency.organisation.outputs.audit_logs_bucket_arn
   audit_logs_bucket_id  = dependency.organisation.outputs.audit_logs_bucket_id
-  master_account_id     = dependency.organisation.outputs.master_account_id
-  master_detector_ids   = dependency.organisation.outputs.master_detector_ids
+  org_account_id        = dependency.organisation.outputs.account_id
+  org_detector_ids      = dependency.organisation.outputs.detector_ids
 }
