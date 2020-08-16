@@ -169,7 +169,7 @@ terragrunt apply --terragrunt-iam-role "arn:aws:iam::<account id>:role/OrgTerrag
 To minimise costs during development, the following command will move from the repository root into the `environments` folder and delete all resources:
 
 ```
-cd environments && terragrunt destroy-all --terragrunt-ignore-external-dependencies --terragrunt-non-interactive --terragrunt-iam-role "arn:aws:iam::<account id>:role/MasterTerragruntAdministratorAccessRole"; cd ..
+cd environments && terragrunt destroy-all --terragrunt-ignore-external-dependencies --terragrunt-non-interactive --terragrunt-iam-role "arn:aws:iam::<account id>:role/OrgTerragruntAdministratorAccessRole"; cd ..
 ```
 
 (Note to self: It's probably best to keep the `cd` bookends to ensure you don't start trying to delete all the other resources (i.e. AWS accounts, IAM users/groups...), unless you're **really** sure that's what you want to do!)
