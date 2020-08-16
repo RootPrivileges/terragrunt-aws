@@ -13,12 +13,12 @@ DEFAULT_REGION='eu-west-2'
 function usage {
     echo "DESCRIPTION:"
     echo "  Script for initializing a basic AWS account structure:"
-    echo "  - An organisation will be configured"
+    echo "  - The default account will be converted to an organisation"
     echo "  - Management, Production and Preprod sub-accounts will be created"
     echo "  - Various groups, including administrators, developers, finance, terragrunt and users will be created"
-    echo "  - An IAM user will be created in the Master organisation with the necessary permissions to run terragrunt"
+    echo "  - An IAM user will be created in the organisation account with the necessary permissions to run terragrunt"
     echo "  - An IAM administrator user will be created"
-    echo "  *** MUST BE INITIALLY RUN WITH CREDENTIALS FOR A SPECIALLY-PROVISIONED USER IN THE MASTER ACCOUNT ***"
+    echo "  *** MUST BE INITIALLY RUN WITH CREDENTIALS FOR A SPECIALLY-PROVISIONED USER IN THE ORGANISATION ACCOUNT ***"
     echo ""
     echo "USAGE:"
     echo "  ${0} -a <access key> -s <secret key> -k <keybase profile> [-l <local_modules_directory>] [-r <region>]"
@@ -105,15 +105,15 @@ fi
 
 export AWS_DEFAULT_REGION=${DEFAULT_REGION}
 
-function export_master_keys {
+function export_init_user_keys {
     echo ""
-    echo "USING MASTER CREDENTIALS"
+    echo "USING PROVIDED CREDENTIALS"
     echo ""
     export AWS_ACCESS_KEY_ID=${ACCESS_KEY}
     export AWS_SECRET_ACCESS_KEY=${SECRET_KEY}
 }
 
-function export_admin_keys {
+function export_admin_user_keys {
     echo ""
     echo "USING ADMIN CREDENTIALS"
     echo ""
@@ -130,7 +130,7 @@ function popd () {
 }
 
 
-export_master_keys
+export_init_user_keys
 
 
 echo -e "\n=== CREATING ORGANISATION ===\n"
@@ -155,7 +155,7 @@ pushd ./organisation
 if [[ -n "${TG_SOURCE}" ]]; then
     TG_SOURCE_MODULE="${TG_SOURCE}//organisation"
 fi
-ACCOUNT_ID=$(terragrunt output ${TG_SOURCE_MODULE} master_account_id)
+ACCOUNT_ID=$(terragrunt output ${TG_SOURCE_MODULE} account_id)
 SUPPORT_USERNAME=$(terragrunt output ${TG_SOURCE_MODULE} support_user_name)
 SUPPORT_PASSWORD=$(terragrunt output ${TG_SOURCE_MODULE} support_user_password | base64 --decode | keybase pgp decrypt)
 popd
@@ -203,22 +203,22 @@ popd
 if [ "$DEV_MODE" -eq 0 ]; then
     echo -e "\n=== DELETING terragrunt.init IAM USER ===\n"
 
-    export_admin_keys
+    export_admin_user_keys
 
     pushd ./first-run/delete-terragrunt-init
     if [[ -n "${TG_SOURCE}" ]]; then
         TG_SOURCE_MODULE="${TG_SOURCE}//utility/iam/import-unmanaged-iam-user"
     fi
     terragrunt init ${TG_SOURCE_MODULE}
-    terragrunt import ${TG_SOURCE_MODULE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole" aws_iam_user.user terragrunt.init
+    terragrunt import ${TG_SOURCE_MODULE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/OrgTerragruntAdministratorAccessRole" aws_iam_user.user terragrunt.init
 
     # Well, this was super annoying... "terraform import" doesn't pick up force_destroy preventing the user being deleted due to unmanaged access keys
     # https://github.com/terraform-providers/terraform-provider-aws/issues/7859
     #
     # Running apply makes terraform see that the force_destroy flag is set for the user, and updates accordingly
-    terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole"
+    terragrunt apply ${TG_SOURCE_MODULE} ${AUTO_APPROVE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/OrgTerragruntAdministratorAccessRole"
 
-    terragrunt destroy ${TG_SOURCE_MODULE} ${AUTO_APPROVE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/MasterTerragruntAdministratorAccessRole"
+    terragrunt destroy ${TG_SOURCE_MODULE} ${AUTO_APPROVE} --terragrunt-iam-role "arn:aws:iam::${ACCOUNT_ID}:role/OrgTerragruntAdministratorAccessRole"
     popd
 fi
 
@@ -226,12 +226,12 @@ echo -e "\n=== INITIALISATION COMPLETE ==="
 echo "Console login                    : https://${ACCOUNT_ID}.signin.aws.amazon.com/console"
 echo "----------------------------------------------------------------"
 echo "Role Switch Links"
-echo "Master Administrator             :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterAdministratorAccessRole&displayName=Master%20-%20Administrator"
-echo "Master Billing                   :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterBillingAccessRole&displayName=Master%20-%20Billing"
-echo "Master Support                   :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterSupportRole&displayName=Master%20-%20Support"
-echo "Master Terragrunt Administrator  :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterTerragruntAdministratorAccessRole&displayName=Master%20-%20Terragrunt%20Administrator"
-echo "Master Terragrunt Data Admin     :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterTerragruntDataAdministratorAccessRole&displayName=Master%20-%20Terragrunt%20Data%20Admin"
-echo "Master Terragrunt Data Read      :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=MasterTerragruntDataReaderAccessRole&displayName=Master%20-%20Terragrunt%20Data%20Read"
+echo "Organisation Administrator       :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=OrgAdministratorAccessRole&displayName=OrgAccount%20-%20Administrator"
+echo "Billing                          :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=OrgBillingAccessRole&displayName=OrgAccount%20-%20Billing"
+echo "Support                          :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=OrgSupportRole&displayName=OrgAccount%20-%20Support"
+echo "Terragrunt Administrator         :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=OrgTerragruntAdministratorAccessRole&displayName=OrgAccount%20-%20Terragrunt%20Administrator"
+echo "Terragrunt Data Admininstrator   :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=OrgTerragruntDataAdministratorAccessRole&displayName=OrgAccount%20-%20Terragrunt%20Data%20Admin"
+echo "Terragrunt Data Reader           :  https://signin.aws.amazon.com/switchrole?account=${ACCOUNT_ID}&roleName=OrgTerragruntDataReaderAccessRole&displayName=OrgAccount%20-%20Terragrunt%20Data%20Read"
 echo "Management Administrator         :  https://signin.aws.amazon.com/switchrole?account=${MANAGEMENT_ID}&roleName=ManagementAdministratorAccessRole&displayName=Management%20-%20Administrator"
 echo "Production Administrator         :  https://signin.aws.amazon.com/switchrole?account=${PRODUCTION_ID}&roleName=ProductionAdministratorAccessRole&displayName=Production%20-%20Administrator"
 echo "Preprod Administrator            :  https://signin.aws.amazon.com/switchrole?account=${PREPROD_ID}&roleName=PreprodAdministratorAccessRole&displayName=Preprod%20-%20Administrator"
