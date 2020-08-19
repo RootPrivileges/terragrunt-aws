@@ -191,7 +191,7 @@ popd
 
 pushd ./iam/users/administrator
 if [[ -n "${TG_SOURCE}" ]]; then
-    TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/administrator-with-terragrunt"
+    TG_SOURCE_MODULE="${TG_SOURCE}//iam/users/administrator"
 fi
 ADMIN_USERNAME=$(terragrunt output ${TG_SOURCE_MODULE} admin_username)
 ADMIN_PASSWORD=$(terragrunt output ${TG_SOURCE_MODULE} admin_user_password | base64 --decode | keybase pgp decrypt)
