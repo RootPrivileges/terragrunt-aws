@@ -79,7 +79,7 @@ This repository uses modules from the master branch of [the associated modules r
 - Set account name as "organisation", to keep this in line with other account names
 
 <p align="center">
-  <img src="https://i.imgur.com/LcQBrF6l.png">
+  <img src="https://i.imgur.com/kDEefed.png">
 </p>
 
 2. Wait for AWS activation email to arrive
