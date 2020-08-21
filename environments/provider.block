@@ -1,0 +1,13 @@
+# This provider block will automatically assume the OrganizationAccountAccessRole
+# permissions in whichever child account is provided in var.account_id. This means
+# that the module code does not need explict providers passed in, stored in the
+# code or passed to each resource.
+
+provider "aws" {
+  version = "~> 2.70"
+  region  = var.aws_region
+
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_id}:role/OrganizationAccountAccessRole"
+  }
+}
