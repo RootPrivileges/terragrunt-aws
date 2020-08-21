@@ -37,6 +37,13 @@ generate "terraform" {
   contents  = file("${get_parent_terragrunt_dir()}/terraform.block")
 }
 
+# Generate provider.tf file dynamically
+generate "provider" {
+  path      = "provider.tf"
+  if_exists = "overwrite"
+  contents  = file("${get_parent_terragrunt_dir()}/provider.block")
+}
+
 # Configure root level variables that all resources inherit
 # This shouldn't need to be edited
 inputs = merge(

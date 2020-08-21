@@ -1,0 +1,9 @@
+provider "aws" {
+  version = "~> 2.69"
+  region  = var.aws_region
+}
+
+variable "aws_region" {
+  description = "The AWS region to deploy to (e.g. us-east-1)"
+  type        = string
+}
