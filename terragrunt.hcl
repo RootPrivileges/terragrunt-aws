@@ -30,6 +30,13 @@ remote_state {
   }
 }
 
+# Generate terraform.tf file dynamically
+generate "terraform" {
+  path      = "terraform.tf"
+  if_exists = "overwrite"
+  contents  = file("${get_parent_terragrunt_dir()}/terraform.block")
+}
+
 # Configure root level variables that all resources inherit
 # This shouldn't need to be edited
 inputs = merge(
