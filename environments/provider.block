@@ -4,7 +4,7 @@
 # code or passed to each resource.
 
 provider "aws" {
-  version = "~> 2.69"
+  version = "~> 2.70"
   region  = var.aws_region
 
   assume_role {
