@@ -1,0 +1,13 @@
+provider "aws" {
+  version = "~> 2.69"
+  region  = var.aws_region
+
+  assume_role {
+    role_arn = "arn:aws:iam::${var.account_id}:role/OrganizationAccountAccessRole"
+  }
+}
+
+variable "aws_region" {
+  description = "The AWS region to deploy to (e.g. us-east-1)"
+  type        = string
+}

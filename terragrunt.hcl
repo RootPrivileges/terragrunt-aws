@@ -30,18 +30,20 @@ remote_state {
   }
 }
 
-# Generate terraform.tf file dynamically
+# Generate terraform.tf file at runtime
 generate "terraform" {
   path      = "terraform.tf"
   if_exists = "overwrite"
   contents  = file("${get_parent_terragrunt_dir()}/terraform.block")
 }
 
-# Generate provider.tf file dynamically
+# Find provider.tf file dynamically, by moving up the tree from the
+# module folder until a "provider.block" file is found. This allows
+# different providers to be used (i.e. using roles for all resources)
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite"
-  contents  = file("${get_parent_terragrunt_dir()}/provider.block")
+  contents  = file(find_in_parent_folders("provider.block"))
 }
 
 # Configure root level variables that all resources inherit
