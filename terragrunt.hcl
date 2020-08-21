@@ -43,7 +43,7 @@ generate "terraform" {
 generate "provider" {
   path      = "provider.tf"
   if_exists = "overwrite"
-  contents  = file(find_in_parent_folders("provider.block"))
+  contents  = file(find_in_parent_folders("provider.block", "${path_relative_from_include()}/provider.block"))
 }
 
 # Configure root level variables that all resources inherit
