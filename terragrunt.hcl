@@ -71,4 +71,4 @@ inputs = merge(
   local.az_vars.locals,
 )
 
-terragrunt_version_constraint = ">= 0.23.31"
+terragrunt_version_constraint = ">= 0.23.36"
