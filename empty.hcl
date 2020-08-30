@@ -1,3 +1,0 @@
-locals {
-  empty = "empty"
-}

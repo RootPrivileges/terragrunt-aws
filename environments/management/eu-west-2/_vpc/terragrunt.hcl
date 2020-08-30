@@ -16,6 +16,7 @@ dependency "management_account" {
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   account_id                       = dependency.management_account.outputs.account_id
+  account_name                     = dependency.management_account.outputs.account_name
   cidr_block                       = "10.200.0.0/16"
   vpc_flow_logs_publisher_role_arn = dependency.management_account.outputs.vpc_flow_logs_publisher_role_arn
 }

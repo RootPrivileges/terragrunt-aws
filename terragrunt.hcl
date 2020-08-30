@@ -8,13 +8,13 @@ locals {
   # Don't edit below
 
   # Automatically load environment-level variables
-  environment_vars = read_terragrunt_config(find_in_parent_folders("environment.hcl", "${path_relative_from_include()}/empty.hcl"))
+  environment_vars = read_terragrunt_config(find_in_parent_folders("environment.hcl", "empty.hcl"), { locals = {} })
 
   # Automatically load region-level variables
-  region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl", "${path_relative_from_include()}/empty.hcl"))
+  region_vars = read_terragrunt_config(find_in_parent_folders("region.hcl", "empty.hcl"), { locals = {} })
 
   # Automatically load account-level variables
-  az_vars = read_terragrunt_config(find_in_parent_folders("availability_zone.hcl", "${path_relative_from_include()}/empty.hcl"))
+  az_vars = read_terragrunt_config(find_in_parent_folders("availability_zone.hcl", "empty.hcl"), { locals = {} })
 }
 
 # Configure Terragrunt to automatically store tfstate files in an S3 bucket
@@ -65,15 +65,21 @@ inputs = merge(
     tfstate_global_bucket        = "tfstate.${local.domain}"
     tfstate_global_bucket_region = local.aws_region
     tfstate_global_dynamodb      = "tflocks.${local.domain}"
-
-    tags = {
-        Terraform     = true
-        TerraformPath = "${path_relative_to_include()}"
-    }
   },
   local.environment_vars.locals,
   local.region_vars.locals,
   local.az_vars.locals,
+  {
+    tags = merge(
+      {
+        Terraform     = true
+        TerraformPath = "${path_relative_to_include()}"
+      },
+      local.environment_vars.locals != {} ? {
+        Environment = local.environment_vars.locals.environment
+      } : {},
+    )
+  },
 )
 
 terragrunt_version_constraint = ">= 0.23.36"
