@@ -13,3 +13,8 @@ variable "aws_region" {
   description = "The AWS region to deploy to (e.g. us-east-1)"
   type        = string
 }
+
+variable "tags" {
+  description = "Tags to apply to created resources"
+  type        = map(string)
+}

@@ -65,6 +65,11 @@ inputs = merge(
     tfstate_global_bucket        = "tfstate.${local.domain}"
     tfstate_global_bucket_region = local.aws_region
     tfstate_global_dynamodb      = "tflocks.${local.domain}"
+
+    tags = {
+        Terraform     = true
+        TerraformPath = "${path_relative_to_include()}"
+    }
   },
   local.environment_vars.locals,
   local.region_vars.locals,
