@@ -21,6 +21,10 @@ inputs = {
   cidr_block                       = "10.200.0.0/16"
   vpc_flow_logs_publisher_role_arn = dependency.management_account.outputs.vpc_flow_logs_publisher_role_arn
 
+  # Be aware of the pitfalls in the README / detailed on
+  # https://registry.terraform.io/modules/hashicorp/subnets/cidr/1.0.0
+  # if changing these assignments after the VPC has been created
+
   private_subnets = {
     tier-2-application = {
       cidr_size               = "large" # 126 usable
