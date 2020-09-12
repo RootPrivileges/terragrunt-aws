@@ -13,11 +13,17 @@ dependency "management_account" {
   config_path = "../../../../accounts/management"
 }
 
+dependency "transit_gateway" {
+  config_path = "../../../shared-networking/transit-gateway/eu-west-2"
+}
+
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
   account_id                       = dependency.management_account.outputs.account_id
   aws_region                       = "eu-west-2"
   cidr_block                       = "10.200.0.0/16"
+  transit_gateway_id               = dependency.transit_gateway.outputs.id
+  transit_gateway_route_table_id   = dependency.transit_gateway.outputs.route_table_id
   vpc_flow_logs_publisher_role_arn = dependency.management_account.outputs.vpc_flow_logs_publisher_role_arn
 
   # Be aware of the pitfalls in the README / detailed on
@@ -32,6 +38,11 @@ inputs = {
     tier-3-database = {
       availability_zones = ["a", "b", "c"]
       cidr_size          = "medium" # 62 usable
+    },
+    tier-3-transit-gateway = {
+      availability_zones = ["a", "b", "c"]
+      cidr_size          = "small" # 14 usable
+      tgw_attachment     = true
     },
   }
 
