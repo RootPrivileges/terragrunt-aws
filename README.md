@@ -65,6 +65,16 @@ All of these buckets have public access blocked.
 
 This repository uses modules from the master branch of [the associated modules repository](https://github.com/RootPrivileges/terragrunt-aws-modules). A decision has been made to always use HEAD of the master branch to reduce the rapidly-growing number of "bumped version to vX.Y.Z" commits that were happening on this repository. In production-use, it would be best-practise to add the `?ref=vX.Y.Z` tag at the end of each of the module imports, to ensure that a known-good version is called during execution.
 
+### A note on VPC assignment
+
+This repository uses [Hashicorp's CIDR subnets module](https://registry.terraform.io/modules/hashicorp/subnets/cidr/1.0.0) to carve a given VPC assignment into a number of various-sized subnets automatically. This module doesn't handle changes to subnetting gracefully after initial creation; in particular, it doesn't like changes happening to existing subnets.
+
+To take from the module page:
+
+> The safest approach is to only add new networks to the end of the list and to never remove an existing network or or change its `new_bits` value. If an existing allocation becomes obsolute, you can set its name explicitly to `null` to skip allocating it a prefix but to retain the space it previously occupied in the address space.
+
+Those directions similarly apply here. I haven't managed to find a good way to build a dynamic list of subnets which can handle changes nicely, although this may happen as Terraform becomes more powerful in the future.
+
 ## Prerequisites
 
 - Terraform >= 0.12, on path
