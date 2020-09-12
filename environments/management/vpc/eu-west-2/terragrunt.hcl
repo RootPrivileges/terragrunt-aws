@@ -26,16 +26,13 @@ inputs = {
 
   private_subnets = {
     tier-2-application = {
-      availability_zones      = ["a", "b", "c"]
-      cidr_size               = "large" # 126 usable
-      public_subnet_name      = "tier-1-dmz"
-      private_acl_rule_number = 10
-      public_acl_rule_number  = 10
+      availability_zones = ["a", "b", "c"]
+      cidr_size          = "large" # 126 usable
     },
     tier-3-database = {
       availability_zones = ["a", "b", "c"]
       cidr_size          = "medium" # 62 usable
-    }
+    },
   }
 
   public_subnets = {
