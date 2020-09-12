@@ -1,7 +1,7 @@
 # Terragrunt will copy the Terraform configurations specified by the source parameter, along with any files in the
 # working directory, into a temporary folder, and execute your Terraform commands in that folder.
 terraform {
-  source = "git::git@github.com:rootprivileges/terragrunt-aws-modules.git//organisation"
+  source = "git::git@github.com:rootprivileges/terragrunt-aws-modules.git//networking/transit-gateway"
 }
 
 # Include all settings from the root terragrunt.hcl file
@@ -9,12 +9,16 @@ include {
   path = find_in_parent_folders()
 }
 
-dependency "first_run" {
-  config_path = "../first-run/convert-to-organisation"
+dependency "organisation" {
+  config_path = "../../../../organisation"
+}
+
+dependency "management_account" {
+  config_path = "../../../../accounts/management"
 }
 
 # These are the variables we have to pass in to use the module specified in the terragrunt configuration above
 inputs = {
-  organisation_admin_role_policy_arn = dependency.first_run.outputs.organisation_admin_role_policy_arn
-  organisation_arn                   = dependency.first_run.outputs.organisation_arn
+  account_id       = dependency.management_account.outputs.account_id
+  organisation_arn = dependency.organisation.outputs.organisation_arn
 }
